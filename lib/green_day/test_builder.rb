@@ -2,11 +2,11 @@
 
 module GreenDay
   module TestBuilder
-    module_function
+    extend self
 
-    def build_test(submit_file_path, input_output_hash)
-      body = input_output_hash.map { |input, output|
-        build_example(submit_file_path, input, output)
+    def build_test(task)
+      body = task.sample_answers.map { |input, output|
+        build_example(task, input, output)
       }.join("\n")
 
       <<~SPEC
@@ -16,14 +16,14 @@ module GreenDay
       SPEC
     end
 
-    def build_example(submit_file_path, input, output)
+    def build_example(task, input, output)
       <<~SPEC
         #{tab}it 'test with #{unify_cr_lf(input)}' do
-        #{tab}#{tab}IO.popen("ruby #{submit_file_path}", "w+") do |io|
-        #{tab}#{tab}#{tab}io.puts(#{unify_cr_lf(input)})
-        #{tab}#{tab}#{tab}io.close_write
-        #{tab}#{tab}#{tab}expect(io.readlines.join).to eq(#{unify_cr_lf(output)})
-        #{tab}#{tab}end
+        #{tab}  IO.popen("ruby \#{__dir__}/../#{task.code}.rb", "w+") do |io|
+        #{tab}    io.puts(#{unify_cr_lf(input)})
+        #{tab}    io.close_write
+        #{tab}    expect(io.readlines.join).to eq(#{unify_cr_lf(output)})
+        #{tab}  end
         #{tab}end
       SPEC
     end

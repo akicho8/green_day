@@ -12,16 +12,13 @@ module GreenDay
   class Cli < Thor
     desc 'login Atcoder', 'login Atcoder and save session'
     def login
-      print 'username:'
+      print 'username: '
       username = $stdin.gets(chomp: true)
-      print 'password:'
+      print 'password: '
       password = $stdin.noecho { |stdin| stdin.gets(chomp: true) }.tap { puts }
 
       AtcoderClient.new.login(username, password)
-      puts(
-        "Successfully created #{AtcoderClient::COOKIE_FILE_NAME}"
-        .colorize(:green)
-      )
+      puts "Successfully created #{AtcoderClient::COOKIE_FILE_NAME}".colorize(:green)
     end
 
     desc 'new [contest name]', 'create contest workspace and spec'
@@ -40,24 +37,11 @@ module GreenDay
     private
 
     def create_submit_file(task)
-      File.open(submit_file_path(task), 'w')
+      File.open(task.submit_file_path, 'w')
     end
 
     def create_spec_file(task)
-      test =
-        TestBuilder.build_test(
-          submit_file_path(task),
-          task.sample_answers
-        )
-      File.write(spec_file_path(task), test)
-    end
-
-    def submit_file_path(task)
-      "#{task.contest.name}/#{task.code}.rb"
-    end
-
-    def spec_file_path(task)
-      "#{task.contest.name}/spec/#{task.code}_spec.rb"
+      File.write(task.spec_file_path, TestBuilder.build_test(task))
     end
   end
 end

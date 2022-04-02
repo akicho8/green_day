@@ -10,6 +10,14 @@ module GreenDay
       @sample_answers = create_sample_answers(client)
     end
 
+    def submit_file_path
+      "#{contest.name}/#{code}.rb"
+    end
+
+    def spec_file_path
+      "#{contest.name}/spec/#{code}_spec.rb"
+    end
+
     private
 
     def create_sample_answers(client)

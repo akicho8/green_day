@@ -46,7 +46,7 @@ RSpec.describe GreenDay::Cli, vcr: true do
         <<~SPEC
           RSpec.describe 'test' do
             it 'test with "2 900\\n"' do
-              IO.popen("ruby abc150/A.rb", "w+") do |io|
+              IO.popen("ruby \#{__dir__}/../A.rb", "w+") do |io|
                 io.puts("2 900\\n")
                 io.close_write
                 expect(io.readlines.join).to eq("Yes\\n")
@@ -54,7 +54,7 @@ RSpec.describe GreenDay::Cli, vcr: true do
             end
 
             it 'test with "1 501\\n"' do
-              IO.popen("ruby abc150/A.rb", "w+") do |io|
+              IO.popen("ruby \#{__dir__}/../A.rb", "w+") do |io|
                 io.puts("1 501\\n")
                 io.close_write
                 expect(io.readlines.join).to eq("No\\n")
@@ -62,7 +62,7 @@ RSpec.describe GreenDay::Cli, vcr: true do
             end
 
             it 'test with "4 2000\\n"' do
-              IO.popen("ruby abc150/A.rb", "w+") do |io|
+              IO.popen("ruby \#{__dir__}/../A.rb", "w+") do |io|
                 io.puts("4 2000\\n")
                 io.close_write
                 expect(io.readlines.join).to eq("Yes\\n")
