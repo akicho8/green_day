@@ -1,30 +1,27 @@
 # frozen_string_literal: true
 
+require "pathname"
+
 module GreenDay
   class Task
-    attr_reader :contest, :code, :sample_answers
+    attr_reader :contest, :code, :client
 
     def initialize(contest, code, client)
       @contest = contest
-      @code = code
-      @sample_answers = create_sample_answers(client)
+      @code    = code
+      @client  = client
     end
 
     def submit_file_path
-      "#{contest.name}/#{code}.rb"
+      Pathname("#{contest.name}/#{code}.rb")
     end
 
     def spec_file_path
-      "#{contest.name}/spec/#{code}_spec.rb"
+      Pathname("#{contest.name}/spec/#{code}_spec.rb")
     end
 
-    private
-
-    def create_sample_answers(client)
-      input_samples, output_samples =
-        client.fetch_inputs_and_outputs(contest, self)
-
-      input_samples.zip(output_samples).to_h
+    def sample_answers
+      @sample_answers ||= client.fetch_inputs_and_outputs(contest, self)
     end
   end
 end

@@ -52,7 +52,7 @@ module GreenDay
 
       inputs, outputs = samples.partition.with_index { |_sample, i| i.even? }
 
-      [inputs, outputs]
+      inputs.zip(outputs).to_h
     end
 
     def login(username, password)

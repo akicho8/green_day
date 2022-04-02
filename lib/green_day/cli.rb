@@ -27,21 +27,11 @@ module GreenDay
       FileUtils.makedirs("#{contest.name}/spec")
 
       Parallel.each(contest.tasks, in_threads: THREAD_COUNT) do |task|
-        create_submit_file(task)
-        create_spec_file(task)
+        task.submit_file_path.write("")
+        task.spec_file_path.write(TestBuilder.build_test(task))
       end
 
       puts "Successfully created #{contest.name} directory".colorize(:green)
-    end
-
-    private
-
-    def create_submit_file(task)
-      File.open(task.submit_file_path, 'w')
-    end
-
-    def create_spec_file(task)
-      File.write(task.spec_file_path, TestBuilder.build_test(task))
     end
   end
 end
