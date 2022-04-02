@@ -46,24 +46,27 @@ RSpec.describe GreenDay::Cli, vcr: true do
         <<~SPEC
           RSpec.describe 'test' do
             it 'test with "2 900\\n"' do
-              io = IO.popen("ruby abc150/A.rb", "w+")
-              io.puts("2 900\\n")
-              io.close_write
-              expect(io.readlines.join).to eq("Yes\\n")
+              IO.popen("ruby abc150/A.rb", "w+") do |io|
+                io.puts("2 900\\n")
+                io.close_write
+                expect(io.readlines.join).to eq("Yes\\n")
+              end
             end
 
             it 'test with "1 501\\n"' do
-              io = IO.popen("ruby abc150/A.rb", "w+")
-              io.puts("1 501\\n")
-              io.close_write
-              expect(io.readlines.join).to eq("No\\n")
+              IO.popen("ruby abc150/A.rb", "w+") do |io|
+                io.puts("1 501\\n")
+                io.close_write
+                expect(io.readlines.join).to eq("No\\n")
+              end
             end
 
             it 'test with "4 2000\\n"' do
-              io = IO.popen("ruby abc150/A.rb", "w+")
-              io.puts("4 2000\\n")
-              io.close_write
-              expect(io.readlines.join).to eq("Yes\\n")
+              IO.popen("ruby abc150/A.rb", "w+") do |io|
+                io.puts("4 2000\\n")
+                io.close_write
+                expect(io.readlines.join).to eq("Yes\\n")
+              end
             end
 
           end

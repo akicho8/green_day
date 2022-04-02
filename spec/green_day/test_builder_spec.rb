@@ -15,10 +15,11 @@ RSpec.describe GreenDay::TestBuilder do
       expect(subject).to eq(
         <<~SPEC
           \s\sit 'test with "2 900\\n"' do
-          \s\s\s\sio = IO.popen("ruby submit_file", "w+")
-          \s\s\s\sio.puts("2 900\\n")
-          \s\s\s\sio.close_write
-          \s\s\s\sexpect(io.readlines.join).to eq("Yes\\n")
+          \s\s\s\sIO.popen("ruby submit_file", "w+") do |io|
+          \s\s\s\s  io.puts("2 900\\n")
+          \s\s\s\s  io.close_write
+          \s\s\s\s  expect(io.readlines.join).to eq("Yes\\n")
+          \s\s\s\send
           \s\send
         SPEC
       )
@@ -35,17 +36,19 @@ RSpec.describe GreenDay::TestBuilder do
         <<~SPEC
           RSpec.describe 'test' do
           \s\sit 'test with "2 900\\n"' do
-          \s\s\s\sio = IO.popen("ruby submit_file", "w+")
-          \s\s\s\sio.puts("2 900\\n")
-          \s\s\s\sio.close_write
-          \s\s\s\sexpect(io.readlines.join).to eq("Yes\\n")
+          \s\s\s\sIO.popen("ruby submit_file", "w+") do |io|
+          \s\s\s\s  io.puts("2 900\\n")
+          \s\s\s\s  io.close_write
+          \s\s\s\s  expect(io.readlines.join).to eq("Yes\\n")
+          \s\s\s\send
           \s\send
 
           \s\sit 'test with "3 900\\n"' do
-          \s\s\s\sio = IO.popen("ruby submit_file", "w+")
-          \s\s\s\sio.puts("3 900\\n")
-          \s\s\s\sio.close_write
-          \s\s\s\sexpect(io.readlines.join).to eq("No\\n")
+          \s\s\s\sIO.popen("ruby submit_file", "w+") do |io|
+          \s\s\s\s  io.puts("3 900\\n")
+          \s\s\s\s  io.close_write
+          \s\s\s\s  expect(io.readlines.join).to eq("No\\n")
+          \s\s\s\send
           \s\send
 
           end
